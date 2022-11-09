@@ -33,12 +33,7 @@ router.post("/", (req, res, next) => {
 
 router.get("/:productID", (req, res, next) => {
   const id = req.params.productID;
-          
-  if (id == "anand") {
-    res.status(200).json({ message: "hey! this is anand" });
-  } else {
-    res.status(200).json({ message: "use products/anand route to find anand" });
-  }
+ 
 });
 
 module.exports = router;

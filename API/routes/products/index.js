@@ -28,12 +28,19 @@ router.post("/", (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
-
 });
 
-router.get("/:productID", (req, res, next) => {
+router.get("/:productID", async (req, res, next) => {
   const id = req.params.productID;
- 
+  try {
+    const productDetails = await Product.findById(id).exec();
+    console.log(productDetails);
+    res.status(200).json(productDetails);
+  } catch (error) {
+    res.status(200).json({error:error.message});
+
+  }
+
 });
 
 module.exports = router;

@@ -7,7 +7,22 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   const products = await Product.find().select("name price _id").exec();
   console.log(products);
-  res.status(200).json({ count: products.length, products: products });
+  res.status(200).json({
+    count: products.length,
+    //MODIFY THE PRODUCTS LIST TO SHOW REQUEST DETAILS
+    products: products.map((item) => {
+      return {
+        _id: item._id,
+        name: item.name,
+        price: item.price,
+        //SEND URL TO GET THE DETAILS OF PARTICULAR ROUTE
+        request: {
+          type: "GET",
+          url: `http://localhost:3000/products/${item._id}`,
+        },
+      };
+    }),
+  });
 });
 
 //HANDLE POST REQUEST

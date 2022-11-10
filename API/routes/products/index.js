@@ -5,9 +5,9 @@ const router = express.Router();
 
 //hANDLE gET REQUEST
 router.get("/", async (req, res, next) => {
-  const products = await Product.find().exec();
+  const products = await Product.find().select("name price _id").exec();
   console.log(products);
-  res.status(200).json(products);
+  res.status(200).json({ count: products.length, products: products });
 });
 
 //HANDLE POST REQUEST
@@ -51,7 +51,7 @@ router.get("/:productID", async (req, res, next) => {
 router.patch("/:productID", async (req, res, next) => {
   const id = req.params.productID;
   try {
-    const productDetails = await Product.findByIdAndUpdate(id,req.body);
+    const productDetails = await Product.findByIdAndUpdate(id, req.body);
     console.log(productDetails);
     res.status(200).json(productDetails);
   } catch (error) {

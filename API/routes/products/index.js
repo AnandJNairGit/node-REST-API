@@ -3,10 +3,14 @@ const { default: mongoose } = require("mongoose");
 const Product = require("../../models/product");
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.status(200).json({ message: "handling GET request to products" });
+//hANDLE gET REQUEST
+router.get("/", async(req, res, next) => {
+  const products=await Product.find().exec();
+  console.log(products);
+  res.status(200).json(products);
 });
 
+//HANDLE POST REQUEST
 router.post("/", (req, res, next) => {
   console.log(req.body);
 
@@ -30,6 +34,7 @@ router.post("/", (req, res, next) => {
     });
 });
 
+//HANDLE GET BY ID REQUEST
 router.get("/:productID", async (req, res, next) => {
   const id = req.params.productID;
   try {
@@ -37,7 +42,7 @@ router.get("/:productID", async (req, res, next) => {
     console.log(productDetails);
     res.status(200).json(productDetails);
   } catch (error) {
-    res.status(200).json({error:error.message});
+    res.status(500).json({error:error.message});
 
   }
 

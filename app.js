@@ -3,12 +3,18 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 
-const productRoutes = require("./API/products");
-const orderRoutes = require("./API/orders");
+const productRoutes = require("./API/routes/products");
+const orderRoutes = require("./API/routes/orders");
+const mongoose = require("mongoose");
 
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+//CONNECT MONGO DB
+const mongooseConnectUrl =
+  "mongodb+srv://AnandJNair:vgsNvMZSAaKYzHs9@node-rest-shop.pmvdiqd.mongodb.net/?retryWrites=true&w=majority";
+mongoose.connect(mongooseConnectUrl);
 
 //Handle CORS error
 app.use((req, res, next) => {
@@ -18,8 +24,10 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
     return res.status(200).json({});
   }
+  next();
 });
 
+//CUSTOME MIDDLEWARE
 const middleware = (req, res, next) => {
   console.log("hiii middleware");
   next();

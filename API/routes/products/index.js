@@ -4,8 +4,8 @@ const Product = require("../../models/product");
 const router = express.Router();
 
 //hANDLE gET REQUEST
-router.get("/", async(req, res, next) => {
-  const products=await Product.find().exec();
+router.get("/", async (req, res, next) => {
+  const products = await Product.find().exec();
   console.log(products);
   res.status(200).json(products);
 });
@@ -42,10 +42,32 @@ router.get("/:productID", async (req, res, next) => {
     console.log(productDetails);
     res.status(200).json(productDetails);
   } catch (error) {
-    res.status(500).json({error:error.message});
-
+    res.status(500).json({ error: error.message });
   }
+});
 
+//HANDLE UPDATE BY ID REQUEST
+router.patch("/:productID", async (req, res, next) => {
+  const id = req.params.productID;
+  try {
+    const productDetails = await Product.findByIdAndUpdate(id,req.body);
+    console.log(productDetails);
+    res.status(200).json(productDetails);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//HANDLE DELETE BY ID REQUEST
+router.delete("/:productID", async (req, res, next) => {
+  const id = req.params.productID;
+  try {
+    const productDetails = await Product.findByIdAndDelete(id);
+    console.log(productDetails);
+    res.status(200).json(productDetails);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;

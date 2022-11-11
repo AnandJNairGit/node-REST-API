@@ -63,9 +63,16 @@ router.patch("/:orderID", async (req, res, next) => {
   }
 });
 
-router.delete("/:orderID", (req, res, next) => {
-  const id = req.params.orderID;
-  res.status(200).json({ message: `order ${id} deleted`, id: id });
+//HANDLE ORDER DELETE REQUEST BY ID
+router.delete("/:orderID", async (req, res, next) => {
+  try {
+    const id = req.params.orderID;
+    const order = await Order.findByIdAndDelete(id);
+    res.status(200).json(order);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
 });
 
 module.exports = router;

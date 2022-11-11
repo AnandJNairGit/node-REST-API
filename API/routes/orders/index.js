@@ -6,7 +6,7 @@ const Order = require("../../models/order");
 //HANDLE ORDERS GET REQUEST
 router.get("/", async (req, res, next) => {
   try {
-    const orderList = await Order.find().select("_id product quantity");
+    const orderList = await Order.find().select("_id product quantity").populate('product','name');
 
     console.log(orderList);
     res.status(200).json({

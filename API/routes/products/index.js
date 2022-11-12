@@ -3,6 +3,30 @@ const { default: mongoose } = require("mongoose");
 const Product = require("../../models/product");
 const router = express.Router();
 
+const multer = require("multer");
+
+//DEFINE STORAGE CONFIGURATION
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./uploads/");
+  },
+  fileName: (req, file, cb) => {
+    console.log("the file name os---------->", file.filename);
+    cb(null, file.filename);
+  },
+});
+
+//DEFINE FILE FILTER CONFIGURATION
+const fileFilter = (req, file, cb) => {
+  console.log("the file is-------->", file);
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, false);
+  } else {
+    cb(null, true);
+  }
+};
+const upload = multer({ storage, fileFilter });
+
 //hANDLE gET REQUEST
 router.get("/", async (req, res, next) => {
   const products = await Product.find().select("name price _id").exec();
@@ -26,13 +50,15 @@ router.get("/", async (req, res, next) => {
 });
 
 //HANDLE POST REQUEST
-router.post("/", (req, res, next) => {
-  console.log(req.body);
+router.post("/", upload.single("productImage"), (req, res, next) => {
+  console.log(req.file.path);
+
 
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
     price: req.body.price,
+    productImage: req.file.path,
   });
 
   product
@@ -45,6 +71,7 @@ router.post("/", (req, res, next) => {
       });
     })
     .catch((err) => {
+      console.log("insudddddiiiee   eerrrrooottrtrrr");
       console.log(err);
       res.status(500).json(err);
     });

@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 
 const productRoutes = require("./API/routes/products");
 const orderRoutes = require("./API/routes/orders");
+const usersRoutes = require("./API/routes/users");
+
 const mongoose = require("mongoose");
 
 
@@ -39,6 +41,7 @@ app.use(middleware);
 // routes that handle request
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
+app.use("/users", usersRoutes);
 
 //error handling
 app.use((req, res, next) => {

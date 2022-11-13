@@ -31,7 +31,11 @@ router.post("/signup", async (req, res, next) => {
           console.log("the response is------>", userRes);
           res.status(200).json({
             message: "User Created",
-            userData: { name: userRes.name, email: userRes.email },
+            userData: {
+              _id: userRes._id,
+              name: userRes.name,
+              email: userRes.email,
+            },
           });
         } catch (error) {
           res.status(500).json(err);
@@ -41,5 +45,21 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
+//HANDLE DELETE REQUEST
+router.delete("/:userId", async (req, res, next) => {
+  const id = req.params.userId;
+  try {
+    const deletedUser = await Users.findByIdAndDelete(id);
+    res.status(200).json({
+      message: "user deleted successfully",
+      _id: deletedUser._id,
+      name: deletedUser.name,
+      email: deletedUser.email,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "user doesnot exist", error: error });
+  }
+});
 
 module.exports = router;

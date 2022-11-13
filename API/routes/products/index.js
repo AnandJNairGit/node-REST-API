@@ -20,16 +20,16 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb) => {
   console.log("the file is-------->", file);
   if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-    cb(null, false);
-  } else {
     cb(null, true);
+  } else {
+    cb(null, false);
   }
 };
 const upload = multer({ storage, fileFilter });
 
 //hANDLE gET REQUEST
 router.get("/", async (req, res, next) => {
-  const products = await Product.find().select("name price _id").exec();
+  const products = await Product.find().select("name price _id productImage").exec();
   console.log(products);
   res.status(200).json({
     count: products.length,
@@ -39,6 +39,7 @@ router.get("/", async (req, res, next) => {
         _id: item._id,
         name: item.name,
         price: item.price,
+        productImage: item.productImage,
         //SEND URL TO GET THE DETAILS OF PARTICULAR ROUTE
         request: {
           type: "GET",
@@ -52,7 +53,6 @@ router.get("/", async (req, res, next) => {
 //HANDLE POST REQUEST
 router.post("/", upload.single("productImage"), (req, res, next) => {
   console.log(req.file.path);
-
 
   const product = new Product({
     _id: new mongoose.Types.ObjectId(),

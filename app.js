@@ -7,7 +7,9 @@ const productRoutes = require("./API/routes/products");
 const orderRoutes = require("./API/routes/orders");
 const mongoose = require("mongoose");
 
+
 app.use(morgan("dev"));
+app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

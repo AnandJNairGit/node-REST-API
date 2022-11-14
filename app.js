@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 //CONNECT MONGO DB
 const mongooseConnectUrl =
-  "mongodb+srv://AnandJNair:vgsNvMZSAaKYzHs9@node-rest-shop.pmvdiqd.mongodb.net/?retryWrites=true&w=majority";
+  "";
 mongoose.connect(mongooseConnectUrl);
 
 //Handle CORS error
